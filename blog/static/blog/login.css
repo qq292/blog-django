@@ -1,0 +1,42 @@
+:root{
+    --ib-width:60px
+}
+
+h3{
+    color:blue;
+}
+
+
+.container-row{
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: start;
+}
+.container-row-between{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-row-around{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+.container-column{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: start;
+}
+
+
+input[type='submit'],button[type='button']{
+    width:var(--ib-width)
+}
+

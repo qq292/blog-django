@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="height: 100%;">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static '/blog/main.css' %}" />
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body class="flex-c justify-between alignitem-center" style="height: 100%;">
+    {% include "blog/head_navigation.html" %}
+
+    
+    <div id="main" class="flex-r justify-center alignitem-start bg-white" style="width:100%;flex 1 1 auto;margin-bottom:auto">
+        
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    
+
+    <div class="flex-r">
+        {% block end %}
+
+        {% endblock %}
+    </div>
+  </body>
+  
+</html>

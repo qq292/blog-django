@@ -1,0 +1,121 @@
+<style>
+   
+  nav {
+    background-color: #f8f8f8;
+    min-height: 140px;
+    width: 100%;
+    padding: 0px 10px;
+  }
+
+
+.search-box {
+    --border-line:1px solid #ccc;
+    --border-line2:1px solid #f5dd5d;
+    --border-radius:20px 0px 0px 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-top: var(--border-line); /* 顶部边框 */
+    border-bottom: var(--border-line); /* 底部边框 */
+    border-left: var(--border-line); /* 左侧边框 */
+    border-right: none; /* 右侧边框设为none */
+
+    border-radius: var(--border-radius);
+}
+.search-box:focus{
+    outline: none;
+    border-top: var(--border-line2); /* 顶部边框 */
+    border-bottom: var(--border-line2); /* 底部边框 */
+    border-left: var(--border-line2); /* 左侧边框 */
+    border-right: none; /* 右侧边框设为none */
+
+}
+
+
+</style>
+
+<nav class="flex-r justify-between alignitem-center"> 
+
+
+  {% if request.user.is_authenticated %}
+
+    <div class="flex-r justify-center alignitem-center" style="flex:0 1 auto;">
+        <a href="{% url 'blog:home' %}">主页</a>
+    </div>
+    
+
+    <div class="flex-r justify-center alignitem-center" style="flex:0 1 auto;margin-left:auto;">
+        <button style="border-radius:2px;color:white;" onclick="javascript:window.location.href='{% url 'blog:createarticle' %}'">写博客</button>
+    </div>
+
+
+
+    <div class="flex-r justify-center alignitem-center" style="flex:0.3 1 auto;margin:0px 10px;">
+		<form id="form_search" action="{% url 'blog:searcharticle' %}" method="post" class="flex-r justify-center alignitem-stretch" style="flex:1 1 auto;">
+            {% csrf_token %}
+            <input name="search_text" type="text" placeholder="Search..." class="search-box" style="width: 100%;">
+            <input type="submit" id="search-but" form="form_search" value="搜索">
+        </form>
+	</div>
+
+
+    <div class="nav-right flex-r alignitem-center" style="flex:0 1 auto;">
+
+        <p>{{ request.user.username }}</p>
+        <a role="button" onclick=" post('{% url 'blog:logout' %}')" href="#">登出</a>
+    </div>
+
+    
+
+  {% else %}
+
+    <div class="flex-r justify-center alignitem-center" style="flex:1 1 auto">
+        <p> 请 <a style="margin:0px 6px"  href="{% url 'blog:login' %}">登陆</a>后访问！</p>
+    </div>
+
+
+    
+  {% endif %}
+
+</nav>
+<script>
+    let csrf = document.querySelector("input[name='csrfmiddlewaretoken']").value
+    function post(url){
+        fetch(url,{
+            method:"post",
+            headers: {
+                "X-CSRFToken":csrf
+            }
+           
+        }).then(response=>response.text())
+        .then(data=>{
+            document.body.innerHTML = data;
+        })
+    }
+        // 获取表单和响应容器元素
+    const form = document.querySelector('#form_search');
+    const url = form.action
+    // 监听表单提交事件
+    form.addEventListener('submit', function(event) {
+    // 阻止默认的表单提交行为
+    event.preventDefault();
+
+    // 创建 FormData 对象包含表单数据
+    const formData = new FormData(form);
+
+    // 使用 fetch 发送 POST 请求
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        const responseContainer = document.getElementById('response');
+        
+        // 将响应数据显示在容器中
+        responseContainer.textContent = data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    });
+</script>

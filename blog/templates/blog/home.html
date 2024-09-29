@@ -1,0 +1,67 @@
+{% extends 'blog/extends/base-nav-footer.html' %}
+{%load static%}
+
+{% block head %}
+    <style>
+        .card{
+            width:15.6rem
+        }
+    </style>
+{% endblock  %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% for obj in page_obj %}
+            <div class="col-lg-3">
+                <div class="card" >
+                    <img src="{%static 'blog/img/me/me.jpg'%}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{obj.title}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{obj.description}}</h6>
+                        {% comment %} <p class="card-text"></p> {% endcomment %}
+                        <a href="{%url "blog:articlecontent" obj.id %}" class="btn btn-primary">查看</a>
+                        <a href="{%url "blog:articlelist" obj.author.id %}" class="btn btn-primary">查看全部文章</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row ">
+            <nav class="col-md-12" aria-label="Page navigation">
+                <ul class="pagination justify-content-center ">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page=1">首页</a>
+                        </li>
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">上一页</a>
+                        </li>
+                    {% endif %}
+
+                    {% comment %} {% for page_number in page_obj.paginator.page_range %}
+                        {% if page_number == page_obj.number %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %} {% endcomment %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">下一页</a>
+                        </li>
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">末页</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}

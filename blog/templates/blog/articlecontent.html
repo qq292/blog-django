@@ -1,0 +1,215 @@
+
+
+
+
+{%extends "blog/extends/base-nav-footer.html"%}
+{% load humanize %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'blog/editor.md-master/examples/css/style.css'%}" />
+    <link rel="stylesheet" href="{% static 'blog/editor.md-master/css/editormd.preview.css'%}" />
+    {% comment %} <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" /> {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css" /> {% endcomment %}
+    <title>{{object.title}}</title>
+    <style>
+        {% comment %} body {padding: 40px;} {% endcomment %}
+        
+        {% comment %} #layout > header, .btns {
+            width: auto;
+        }
+        
+        #sidebar {
+            width: 400px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            right: 0;
+            overflow: hidden;
+            background: #fff;
+            z-index: 100;
+            padding: 18px; 
+            border: 1px solid #ddd;
+            border-top: none;
+            border-bottom: none;
+        }
+        
+        #sidebar:hover {
+            overflow: auto;
+        }
+        
+        #sidebar h1 {
+            font-size: 16px;
+        }
+        
+        #custom-toc-container {
+            padding-left: 0;
+        } {% endcomment %}
+        
+           
+       #test-editormd-view, #test-editormd-view2 {
+            padding-left: 0;
+            width: 100%;
+            margin: 0;
+        } 
+    </style>
+{% endblock  %}
+
+
+
+
+{% block body %}
+
+
+    <div class="container card px-0">
+        <div class="card-header">
+            <h1 class="display-2">{{object.title}}</h1>
+            
+            
+            {% for tag in article_tags %}
+            <span class="d-inline-block" tabindex="0"  data-bs-toggle="popover" data-bs-title="{{tag.fields.tag_name}}" data-bs-trigger="hover" data-bs-content="本站该标签共 {{tag.fields.to|length}} 篇文章">
+                <span role="button" disabled class="badge rounded-pill  text-bg-success ">{{tag.fields.tag_name}}</span>
+            </span>
+            
+            {% endfor %}
+                
+            
+            
+            <div class="row ">
+                <small class="col-md-12 col-12"><span>作者：{{object.users_article.username}}</span></small>
+
+                <small class="col-md-6 col-6"><span> 发布：{{object.created_date | naturaltime }}</span></small>
+                <small class="col-md-6 col-6"><span>修改：{{object.last_modified | naturalday }}</span></small>
+            </div>
+            
+        </div>
+        
+        
+        <div class="card-body">
+            
+            <script src="{% static 'blog/editor.md-master/examples/js/jquery.min.js'%}"></script>
+            <script src="{%static 'blog/editor.md-master/lib/marked.min.js'%}"></script>
+            <script src="{%static 'blog/editor.md-master/lib/prettify.min.js'%}"></script>
+            
+            <script src="{%static 'blog/editor.md-master/lib/raphael.min.js'%}"></script>
+            <script src="{%static 'blog/editor.md-master/lib/underscore.min.js'%}"></script>
+            <script src="{%static 'blog/editor.md-master/lib/sequence-diagram.min.js'%}"></script>
+            <script src="{%static 'blog/editor.md-master/lib/flowchart.min.js'%}"></script>
+            <script src="{%static 'blog/editor.md-master/lib/jquery.flowchart.min.js'%}"></script>
+
+            <script src="{%static 'blog/editor.md-master/src/editormd.js'%}"></script>
+            
+
+
+
+            
+                <div id="test-editormd-view" >
+                    <textarea style="display:none;" name="test-editormd-markdown-doc">###Hello world!</textarea>               
+                </div>
+                <div id="test-editormd-view2">
+                    <textarea id="append-test" style="display:none;white-space: pre">{{object.content}}</textarea>          
+                </div>
+            
+
+            
+            <div class="col-md-12 " id="layout" style="display:none">
+                
+                    <header>
+                        <h1>Markdown转HTML的显示处理之自定义 ToC 容器</h1> 
+                        <p>即：非编辑情况下的HTML预览</p>
+                        <p>HTML Preview (markdown to html and custom ToC container)</p>       
+                    </header>
+                    <div class="btns">
+                        <button onclick="location.href='./html-preview-markdown-to-html.html';">返回 Back</button>
+                    </div>
+                    <div id="sidebar">
+                        <h1>Table of Contents</h1>
+                        <div class="markdown-body editormd-preview-container" id="custom-toc-container">#custom-toc-container</div>
+                    </div>
+                    
+               
+            </div>
+            
+        </div>
+    </div>
+
+
+
+  
+
+
+    
+
+{% endblock  %}
+
+
+
+
+{% block jssrc  %}
+<script type="text/javascript">
+    $(function() {
+        var testEditormdView, testEditormdView2;
+        
+        markdown="\r\n" +$("#append-test").text()+"\r\n"
+            
+            testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+                markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
+                //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                //toc             : false,
+                tocm            : true,    // Using [TOCM]
+                tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+                //gfm             : false,
+                //tocDropdown     : true,
+                // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+                emoji           : true,
+                taskList        : true,
+                tex             : true,  // 默认不解析
+                flowChart       : true,  // 默认不解析
+                sequenceDiagram : true,  // 默认不解析
+            });
+            
+            //console.log("返回一个 jQuery 实例 =>", testEditormdView);
+            
+            // 获取Markdown源码
+            //console.log(testEditormdView.getMarkdown());
+            
+            //alert(testEditormdView.getMarkdown());
+        
+            
+       /* testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
+            htmlDecode      : "style,script,iframe",  // you can filter tags decode
+            emoji           : true,
+            taskList        : true,
+            tex             : true,  // 默认不解析
+            flowChart       : true,  // 默认不解析
+            sequenceDiagram : true,  // 默认不解析
+        }); 
+        */
+        
+    });
+</script>
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

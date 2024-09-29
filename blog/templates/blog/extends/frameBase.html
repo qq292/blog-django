@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static '/blog/main.css' %}" />
+    <link rel="stylesheet" href="{% static '/blog/frameBase.css' %}" />
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body class="flex-r justify-center">
+    <div class="flex-c justify-center alignitem-center  no-select bg0" style="width:100%">
+      <header class="flex-r justify-center alignitem-center bg-blue" style="width:100%;min-height: 62px;">
+        {% block header %}
+
+        {% endblock %}
+      </header>
+      <div id="frame-content" class="flex-r justify-center alignitem-center bg-white" style="width:100%">
+        {% block content %}
+
+        {% endblock %}
+      </div>
+    </div>
+  </body>
+  {% block end %}
+
+  {% endblock %}
+</html>

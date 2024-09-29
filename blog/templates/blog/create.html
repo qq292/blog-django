@@ -1,0 +1,39 @@
+{% extends 'blog/extends/frameBase.html' %}
+{% block head %}
+  <titlE>注册</titlE>
+{% endblock %}
+
+{% block header %}
+  <h3>注册账号</h3>
+{% endblock %}
+
+{% block content %}
+  <form class="flex-c" method="post" action="{% url 'blog:create' %}" style="width:100%">
+   {% include "blog/form_.html" %}
+
+    <input type="submit" value="注册">
+  </form>
+{% endblock %}
+
+{% block end %}
+  <script>
+    let img = document.querySelector('#captcha img')
+    let id_captcha_0 = document.querySelector('#id_captcha_0')
+    img.addEventListener('click', () => {
+      fetch('{%url "blog:updateCaptcha" %}', {
+        method: 'post'
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json()
+          } else {
+            console.log('没交话费！')
+          }
+        })
+        .then((data) => {
+          img.src = data['img_url']
+          id_captcha_0.value = data['captcha_answer']
+        })
+    })
+  </script>
+{% endblock %}

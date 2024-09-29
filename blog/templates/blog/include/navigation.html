@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="{%url "blog:home"%}">主页</a>
+     
+        {% if request.user.is_authenticated %}
+            <a href="{%url 'blog:createarticle'%}" class="nav-link">写博客</a>
+
+        {% else %}
+            <a href="{%url 'blog:login'%}" class="nav-link">登录</a>
+        {% endif %}
+     
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            
+            <ul class="navbar-nav">
+
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">{{request.user}}</a>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{%url 'blog:logout'%}">
+                        {% csrf_token %}
+                        <input class="btn nav-link" type="submit" value="注销">
+                    </form>
+                </li>
+            {% endif %}
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled">Disabled</a>
+                </li>
+            </ul>
+            <div class="navbar-nav">
+                <div class="navbar-form ">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <i class="bi bi-search  search"></i>
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="btn bnt-light">搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+        
+    </div>
+</nav>

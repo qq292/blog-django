@@ -1,0 +1,20 @@
+{% csrf_token %}
+{% for item in form %}
+  {% if item == form.captcha %}
+    {{ item.label_tag }}
+    <div id="captcha">{{ item }}</div>
+    {{ item.errors }}
+  {% elif item == form.is_superuser or item == form.is_staff %}
+    <p class="flex-r justify-between alignitem-center" >
+        {{ item.label_tag }}
+        {{ item }}
+    </p>
+    {{ item.errors }}
+  {% else %}
+    <tr>
+      <td>{{ item.label_tag }}</td>
+      <td>{{ item }}</td>
+      <td>{{ item.errors }}</td>
+    </tr>
+  {% endif %}
+{% endfor %}

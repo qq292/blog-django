@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html >
+    <head>
+        {% block head %}{% endblock head %}
+        <meta  charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/bootstrap5.3.0/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static "blog/my/css/footer.css" %}">
+        
+    </head>
+    <body >
+        <div>
+            {% block header %}{% endblock  %}
+        </div>
+        <div>
+            {% block body %}{% endblock  %}
+        </div>
+        <div>
+            {% block footer %}{% endblock  %}
+        </div>
+
+        <div>
+            
+            <script  src="{%static 'blog/bootstrap5.3.0/js/bootstrap.bundle.min.js'%}"></script>
+            <script src="{% static "blog/my/js/footer.js" %}"></script>
+            {% block jssrc %}{% endblock %}
+        </div>
+        
+    </body>
+</html>

@@ -1,0 +1,189 @@
+{% extends "blog/extends/base-nav-footer.html" %}
+{%load static%}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{%static 'blog/editor.md-master/css/editormd.css' %}">
+{% endblock  %}
+
+
+
+
+{% load attr %}
+{% block body %}
+<div class="container" >
+    <form  action="{%url 'blog:createarticle' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            {{ form.title.errors }}
+            {{ form.content.errors}}
+            {{ form.description.errors}}
+        </div>
+        
+        <div class="form-floating">
+            {{ form.title|attr:"class:form-control placeholder:xxx" }}
+            <label class="text-secondary" for="id_title">标题</label>
+        </div>
+        {% comment %} <span class="badge bg-secondary"><input name="article_tags"  role=".badge" type="checkbox" value="阿萨飒飒1"> </span>   
+        <span class="badge bg-secondary"><input name="article_tags"  role=".badge" type="checkbox" value="阿萨飒飒2"> </span>  {% endcomment %}
+    
+        <div class="d-flex justify-content-start">
+           
+            <p class="accordion-header px-3" id="flush-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    编辑-文章简介
+                </button>
+            </p>
+            <p class="accordion-header px-3" id="flush-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                    编辑-文章标签
+                </button>
+            </p>
+        </div>
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                
+                <div class="accordion-body ">
+                    <div class="form-floating">
+                        {{ form.description|attr:"class:form-control rows:4 placeholder:xxx" }}
+                        <label class="text-secondary " for="id_description">概述</label>
+                    </div>
+                    
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body ">
+                    {{form.article_tags}}
+                    
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="input-group mt-2" >
+                            <input id="article_tag_input" type="text" class="form-control" placeholder="输入-标签名" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                            <div class="input-group-text" id="btnGroupAddon">
+                                <button id="addtag" class="btn btn-light" type="button">添加标签</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div style="display:none">
+            {{ form.content}}
+        </div>
+        <div class="row">
+            <div class="col-md-12" id ="test-editormd">
+                <textarea style="display:none;">### Bootstrap 兼容测试</textarea>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-12">
+                <input class="btn btn-light" id = "articleCreate" type="submit" method="post"  value="发布文章" />
+            </div>
+            
+        </div>
+       
+        
+        
+    </form>
+</div>
+{% endblock %}
+
+       
+
+{% block jssrc %}
+    <script src="{% static 'blog/editor.md-master/examples/js/jquery.min.js'%}"></script>
+    <script src="{%static 'blog/editor.md-master/src/editormd.js'%}"></script>
+
+    {% comment %} <script src="../examples/js/jquery.min.js"></script>
+    <script src="../editormd.js"></script> {% endcomment %}
+
+
+    <script  type="text/javascript">
+        var testEditor;
+        article_tag_input = document.querySelector("#article_tag_input")
+        csrf_token = document.querySelector("input[name='csrfmiddlewaretoken']").value
+        desbox = document.querySelector("#id_description")
+        desbox.style.height="100px"
+        addtag_bnt=document.querySelector("#addtag")
+
+        //添加文章按钮标签
+        addtag_bnt.addEventListener('click',()=>{
+            tag_name = article_tag_input.value.replace(/\s+/g, '')
+            if(tag_name.length==0){
+                console.log("标签名 不能为空")
+                return 
+            }
+            fetch('{%url 'blog:createarticletags'%}',{method:"post",headers:{"X-CSRFToken":csrf_token,'Content-Type':'application/json'},body:JSON.stringify({"tag_name":tag_name})})
+            .then(response=>response.json())
+            .then(data=>{
+                if(!data['error'])
+                addArticleTagHtml(data['tag_name'],data['tag_id'])
+                article_tag_input.value=''
+            })
+        })
+
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              var r = Math.random() * 16 | 0,
+                  v = c === 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            });
+        }
+           
+        function addArticleTagHtml(tag_name,tag_id){
+            id_article_tags = document.querySelector("#id_article_tags")
+            id=uuidv4()
+            doc = document
+            div = doc.createElement('div')
+            label = doc.createElement('label')
+            label.innerText=tag_name
+            label.setAttribute("for",id)
+            input = doc.createElement('input')
+            input.setAttribute('name','article_tags')
+            input.setAttribute('type','checkbox')
+            input.setAttribute("id",id)
+            input.setAttribute("value",tag_id)
+            label.append(input)
+            div.append(label)
+            id_article_tags.append(div) 
+        }
+
+
+        const content = document.querySelector('#id_content')
+        const articleCreate = document.querySelector('#articleCreate')
+        articleCreate.addEventListener("click",()=>{content.value =testEditor.getMarkdown() })
+       
+          
+          $(function() {     
+                  testEditor = editormd("test-editormd", {
+                      
+                      height: 740,
+                      path : '/static/blog/editor.md-master/lib/',
+                      markdown : content.value,
+                      codeFold : true,
+                      saveHTMLToTextarea : true, 
+                      searchReplace : true,
+                      htmlDecode : "style,script,iframe|on*", 
+                      emoji : true,
+                      taskList : true,
+                      tocm            : true,         // Using [TOCM]
+                      tex : true,                   // 开启科学公式TeX语言支持，默认关闭
+                      flowChart : true,             // 开启流程图支持，默认关闭
+                      sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+                      imageUpload : true,
+                      imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                      imageUploadURL : "../examples/php/upload.php",
+                      onload : function() {
+                          console.log('onload', this);
+                      }
+                  });
+            
+          });
+    </script>
+{% endblock  %}

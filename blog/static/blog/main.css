@@ -1,0 +1,160 @@
+
+*{
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+
+li {
+    list-style-type: none;
+}
+
+ul {
+    padding-inline-start: 0px;
+}
+
+
+.errorlist {
+    padding-inline-start: 0px;
+    border: 2px dashed pink;
+    border-radius: 14px;
+
+}
+
+
+.errorlist li {
+    color: brown;
+    list-style-type: none;
+    margin: 6px;
+}
+
+#captcha {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+}
+
+
+#id_captcha_1 {
+    flex: 1;
+}
+
+.no-select {
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE 10+ */
+    user-select: none;
+    /* Standard syntax */
+}
+
+
+
+/* 通用 */
+
+:root {
+    --size-36px: 36px;
+}
+
+
+.flex-c {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-r {
+    display: flex;
+    flex-direction: row;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-start {
+    justify-content: flex-start;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-around {
+    justify-content: space-around;
+}
+
+.justify-evenly {
+    justify-content: space-evenly;
+}
+
+
+.alignitem-center {
+    align-items: center;
+}
+
+.alignitem-start {
+    align-items: flex-start;
+}
+
+.alignitem-end {
+    align-items: flex-end;
+}
+
+.alignitem-stretch {
+    align-items: stretch;
+}
+
+.alignitem-baseline {
+    align-items: baseline;
+}
+
+
+select,
+button,
+input {
+    min-height: var(--size-36px);
+    min-width: 78px;
+}
+
+button,
+input[type='submit'] {
+    border: none;
+    background-color: #417690;
+    color: white;
+}
+
+
+button:focus:hover:active,
+input[type='submit']:focus:hover:active{
+    background-color: #205067;
+}
+
+button:hover,
+input[type='submit']:hover {
+    background-color: #205067;
+}
+
+
+
+
+
+
+.bg-blue {
+    background-color: #417690;
+    color: #f5dd5d
+}
+
+.bg-white {
+    background-color: white;
+}
+
+body {
+    background-color: #f8f8f8;
+}
