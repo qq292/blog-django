@@ -15,10 +15,12 @@ from rest_framework.pagination import PageNumberPagination
 
 # 人类可阅读的时间日期
 class TimeSerializer(serializers.HyperlinkedModelSerializer):
-    created_date = serializers.SerializerMethodField(method_name='get_date')
-    last_modified = serializers.SerializerMethodField(method_name='get_date')
-    def get_date(self,obj):
+    created_date = serializers.SerializerMethodField()
+    last_modified = serializers.SerializerMethodField()
+    def get_created_date(self,obj):
         return timesince(obj.created_date)
+    def get_last_modified(self,obj):
+        return timesince(obj.last_modified) 
    
 
 #分页类
